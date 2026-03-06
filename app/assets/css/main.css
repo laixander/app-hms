@@ -421,7 +421,7 @@
   left: 0;
   right: 0;
   height: 16px;
-  background: radial-gradient(circle at 10px -4px, transparent 12px, white 13px);
+  background: radial-gradient(circle at 10px -6px, transparent 12px, white 13px);
   background-size: 20px 16px;
 }
 
