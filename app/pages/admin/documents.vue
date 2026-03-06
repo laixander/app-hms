@@ -38,7 +38,7 @@ const fileIconColors: Record<string, string> = {
     pdf: 'text-red-400',
     docx: 'text-blue-400',
     xlsx: 'text-emerald-400',
-    default: 'text-slate-400'
+    default: 'text-slate-500 dark:text-slate-400'
 }
 
 const toast = useToast()
@@ -57,9 +57,9 @@ function handleAction(action: string) {
     <div class="flex flex-col lg:flex-row gap-6 min-h-[calc(100vh-140px)]">
         <!-- File Browser Panel -->
         <div
-            class="w-full lg:w-80 shrink-0 bg-slate-900 border border-white/5 rounded-2xl p-5 overflow-y-auto custom-scrollbar">
+            class="w-full lg:w-80 shrink-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-2xl p-5 overflow-y-auto custom-scrollbar">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-sm font-semibold text-white flex items-center gap-2">
+                <h3 class="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
                     <UIcon name="i-lucide-folder-tree" class="w-4 h-4 text-blue-400" />
                     Documents
                 </h3>
@@ -71,7 +71,7 @@ function handleAction(action: string) {
                 <template v-for="folder in fileTree" :key="folder.id">
                     <!-- Folder -->
                     <button
-                        class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-white/5 transition-colors"
+                        class="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 dark:bg-white/5 transition-colors"
                         @click="toggleFolder(folder.id)">
                         <UIcon
                             :name="expandedFolders.has(folder.id) ? 'i-lucide-chevron-down' : 'i-lucide-chevron-right'"
@@ -90,7 +90,7 @@ function handleAction(action: string) {
                                 @click="selectFile(file)">
                                 <UIcon :name="fileIcons[file.extension || 'default'] || fileIcons.default"
                                     :class="['w-4 h-4 shrink-0', fileIconColors[file.extension || 'default'] || fileIconColors.default]" />
-                                <span class="flex-1 truncate text-slate-300">{{ file.name }}</span>
+                                <span class="flex-1 truncate text-slate-700 dark:text-slate-300">{{ file.name }}</span>
                                 <UBadge v-if="file.status" :color="statusConfig[file.status]?.color as any"
                                     variant="subtle" size="xs">
                                     {{ statusConfig[file.status]?.label }}
@@ -103,16 +103,18 @@ function handleAction(action: string) {
         </div>
 
         <!-- Detail Panel -->
-        <div class="flex-1 bg-slate-900 border border-white/5 rounded-2xl p-6">
+        <div
+            class="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-2xl p-6">
             <template v-if="selectedFile">
                 <div class="flex items-start justify-between mb-6">
                     <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center">
+                        <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-white/5 flex items-center justify-center">
                             <UIcon :name="fileIcons[selectedFile.extension || 'default'] || fileIcons.default"
                                 :class="['w-7 h-7', fileIconColors[selectedFile.extension || 'default'] || fileIconColors.default]" />
                         </div>
                         <div>
-                            <h2 class="text-lg font-semibold text-white">{{ selectedFile.name }}</h2>
+                            <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{{ selectedFile.name }}
+                            </h2>
                             <div class="flex items-center gap-2 mt-1">
                                 <UBadge v-if="selectedFile.status"
                                     :color="statusConfig[selectedFile.status]?.color as any" variant="subtle" size="sm">
@@ -126,27 +128,33 @@ function handleAction(action: string) {
 
                 <!-- Metadata -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="p-4 rounded-xl bg-white/3 border border-white/5">
+                    <div
+                        class="p-4 rounded-xl bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-slate-200 dark:border-white/5">
                         <p class="text-xs text-slate-500 mb-1">File Size</p>
-                        <p class="text-sm font-semibold text-white">{{ selectedFile.size }}</p>
+                        <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ selectedFile.size }}</p>
                     </div>
-                    <div class="p-4 rounded-xl bg-white/3 border border-white/5">
+                    <div
+                        class="p-4 rounded-xl bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-slate-200 dark:border-white/5">
                         <p class="text-xs text-slate-500 mb-1">Author</p>
-                        <p class="text-sm font-semibold text-white">{{ selectedFile.author }}</p>
+                        <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ selectedFile.author }}</p>
                     </div>
-                    <div class="p-4 rounded-xl bg-white/3 border border-white/5">
+                    <div
+                        class="p-4 rounded-xl bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-slate-200 dark:border-white/5">
                         <p class="text-xs text-slate-500 mb-1">Last Modified</p>
-                        <p class="text-sm font-semibold text-white">{{ selectedFile.modified }}</p>
+                        <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ selectedFile.modified }}</p>
                     </div>
-                    <div class="p-4 rounded-xl bg-white/3 border border-white/5">
+                    <div
+                        class="p-4 rounded-xl bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-slate-200 dark:border-white/5">
                         <p class="text-xs text-slate-500 mb-1">Format</p>
-                        <p class="text-sm font-semibold text-white">{{ selectedFile.extension?.toUpperCase() }} Document
+                        <p class="text-sm font-semibold text-slate-900 dark:text-white">{{
+                            selectedFile.extension?.toUpperCase() }} Document
                         </p>
                     </div>
                 </div>
 
                 <!-- Preview -->
-                <div class="p-8 rounded-xl bg-white/2 border border-white/5 mb-6 text-center">
+                <div
+                    class="p-8 rounded-xl bg-slate-50 dark:bg-white/2 border border-slate-200 dark:border-slate-200 dark:border-white/5 mb-6 text-center">
                     <UIcon name="i-lucide-eye" class="w-12 h-12 text-slate-700 mx-auto mb-3" />
                     <p class="text-sm text-slate-500">Document preview</p>
                     <p class="text-xs text-slate-600 mt-1">Preview is available for supported formats</p>
@@ -155,19 +163,19 @@ function handleAction(action: string) {
                 <!-- Actions -->
                 <div class="flex flex-wrap gap-3">
                     <button
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium hover:bg-blue-500/20 transition-colors"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-400 text-sm font-medium hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors"
                         @click="handleAction('Download')">
                         <UIcon name="i-lucide-download" class="w-4 h-4" />
                         Download
                     </button>
                     <button
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm font-medium hover:bg-white/10 transition-colors"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-200 dark:hover:bg-white/10 transition-colors"
                         @click="handleAction('Archive')">
                         <UIcon name="i-lucide-archive" class="w-4 h-4" />
                         Archive
                     </button>
                     <button v-if="selectedFile.status === 'pending' || selectedFile.status === 'draft'"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm font-medium hover:bg-emerald-500/20 transition-colors"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-400 text-sm font-medium hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-colors"
                         @click="handleAction('Approve')">
                         <UIcon name="i-lucide-check-circle" class="w-4 h-4" />
                         Approve

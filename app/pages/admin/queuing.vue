@@ -192,53 +192,18 @@ watch(() => state.value.lastUpdate, () => {
     <div class="space-y-6">
         <!-- Stats Row -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="stat-card bg-slate-900 border border-white/5" style="--accent: #3b82f6;">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Now Serving</span>
-                    <div class="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center">
-                        <UIcon name="i-lucide-volume-2" class="w-4 h-4 text-blue-400"
-                            :class="{ 'animate-pulse': paAlertPlaying }" />
-                    </div>
-                </div>
-                <p class="text-3xl font-black text-white">
-                    {{ state.currentServing?.number || '---' }}
-                </p>
-                <p class="text-xs text-slate-500 mt-1">{{ state.currentServing?.department || 'No patient' }}</p>
-            </div>
+            <StatCard title="Now Serving" :value="state.currentServing?.number || '---'"
+                :subtext="state.currentServing?.department || 'No patient'" icon="i-lucide-volume-2" color="blue"
+                :icon-class="paAlertPlaying ? 'animate-pulse' : ''" />
 
-            <div class="stat-card bg-slate-900 border border-white/5">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Waiting</span>
-                    <div class="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center">
-                        <UIcon name="i-lucide-clock" class="w-4 h-4 text-amber-400" />
-                    </div>
-                </div>
-                <p class="text-3xl font-black text-white">{{ waitingList.length }}</p>
-                <p class="text-xs text-slate-500 mt-1">patients in queue</p>
-            </div>
+            <StatCard title="Waiting" :value="waitingList.length" subtext="patients in queue" icon="i-lucide-clock"
+                color="amber" />
 
-            <div class="stat-card bg-slate-900 border border-white/5">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Served Today</span>
-                    <div class="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center">
-                        <UIcon name="i-lucide-check-circle" class="w-4 h-4 text-emerald-400" />
-                    </div>
-                </div>
-                <p class="text-3xl font-black text-white">{{state.entries.filter(e => e.status === 'completed').length
-                }}</p>
-                <p class="text-xs text-slate-500 mt-1">completed</p>
-            </div>
+            <StatCard title="Served Today" :value="state.entries.filter(e => e.status === 'completed').length"
+                subtext="completed" icon="i-lucide-check-circle" color="emerald" />
 
-            <div class="stat-card bg-slate-900 border border-white/5">
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Tickets</span>
-                    <div class="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center">
-                        <UIcon name="i-lucide-ticket" class="w-4 h-4 text-violet-400" />
-                    </div>
-                </div>
-                <p class="text-3xl font-black text-white">{{ state.entries.length }}</p>
-                <p class="text-xs text-slate-500 mt-1">today</p>
-            </div>
+            <StatCard title="Total Tickets" :value="state.entries.length" subtext="today" icon="i-lucide-ticket"
+                color="violet" />
         </div>
 
         <!-- Action Buttons -->
@@ -251,7 +216,7 @@ watch(() => state.value.lastUpdate, () => {
             </button>
 
             <button v-if="state.currentServing"
-                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-medium text-sm hover:bg-white/10 transition-all active:scale-95"
+                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white font-medium text-sm hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-95"
                 @click="handleSkip">
                 <UIcon name="i-lucide-skip-forward" class="w-4 h-4" />
                 Skip Current
@@ -261,7 +226,7 @@ watch(() => state.value.lastUpdate, () => {
         <!-- PA Alert Banner -->
         <Transition name="slide">
             <div v-if="paAlertPlaying"
-                class="flex items-center gap-3 p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 animate-fade-in-up">
+                class="flex items-center gap-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 animate-fade-in-up">
                 <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center animate-pulse">
                     <UIcon name="i-lucide-volume-2" class="w-5 h-5 text-blue-400" />
                 </div>
@@ -274,21 +239,22 @@ watch(() => state.value.lastUpdate, () => {
 
         <div class="flex flex-col lg:grid lg:grid-cols-3 gap-6">
             <!-- Live Queue List -->
-            <div class="w-full lg:col-span-2 bg-slate-900 border border-white/5 rounded-2xl p-5">
-                <h3 class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+            <div
+                class="w-full lg:col-span-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-2xl p-5">
+                <h3 class="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                     <UIcon name="i-lucide-list" class="w-4 h-4 text-blue-400" />
                     Live Queue
                 </h3>
 
                 <div v-if="waitingList.length > 0" class="space-y-2 max-h-[400px] overflow-y-auto custom-scrollbar">
                     <div v-for="entry in waitingList" :key="entry.id"
-                        class="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/5 hover:bg-white/5 transition-colors">
+                        class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 dark:bg-white/3 border border-slate-200 dark:border-white/5 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors">
                         <div
                             :class="[deptColors[entry.departmentCode], 'w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold text-white shrink-0']">
                             {{ entry.departmentCode }}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-white">{{ entry.number }}</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ entry.number }}</p>
                             <p class="text-xs text-slate-500">{{ entry.department }}</p>
                         </div>
                         <div class="text-right shrink-0">
@@ -309,8 +275,9 @@ watch(() => state.value.lastUpdate, () => {
             </div>
 
             <!-- Wait Time Chart -->
-            <div class="bg-slate-900 border border-white/5 rounded-2xl p-5">
-                <h3 class="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+            <div
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-2xl p-5">
+                <h3 class="text-sm font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
                     <UIcon name="i-lucide-bar-chart-3" class="w-4 h-4 text-blue-400" />
                     Avg. Wait Time by Dept
                 </h3>

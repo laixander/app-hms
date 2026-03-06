@@ -222,14 +222,23 @@
   .admin-sidebar.is-collapsed .sidebar-text {
     opacity: 0;
     width: 0;
+    height: 0;
     padding: 0;
     margin: 0;
     overflow: hidden;
   }
 
   .admin-sidebar.is-collapsed .admin-sidebar-link {
+    display: flex;
     justify-content: center;
     padding: 10px;
+    margin: 2px auto;
+    width: fit-content;
+    gap: 0;
+  }
+
+  .admin-sidebar.is-collapsed .admin-sidebar-logo {
+    justify-content: center;
     gap: 0;
   }
 }
