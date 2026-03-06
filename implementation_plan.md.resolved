@@ -1,0 +1,146 @@
+# Reorganize Codebase to Follow Nuxt Directory Structure
+
+The project is a Nuxt 4 Hospital Management System with a patient kiosk and admin dashboard. Currently, all code lives in `app/` with minimal structure—types are inline, the admin sidebar layout is embedded in a page file, and there are no proper Nuxt layouts. This plan reorganizes the codebase to follow Nuxt's recommended directory conventions.
+
+## Current Structure
+
+```
+app/
+├── app.vue
+├── app.config.ts
+├── assets/css/main.css
+├── components/AppLogo.vue
+├── composables/useLanguage.ts, useQueueState.ts
+└── pages/
+    ├── index.vue          (home/landing)
+    ├── kiosk.vue           (patient queuing kiosk)
+    ├── admin.vue           (acts as "layout" via nested routes)
+    └── admin/
+        ├── index.vue       (redirect to queuing)
+        ├── queuing.vue
+        ├── documents.vue
+        ├── assets.vue
+        ├── hr.vue
+        └── waste.vue
+```
+
+## Proposed Changes
+
+### 1. Types — Extract interfaces to `app/types/`
+
+#### [NEW] [queue.ts](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/types/queue.ts)
+- Move [QueueEntry](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/composables/useQueueState.ts#1-10), [QueueState](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/composables/useQueueState.ts#11-17), and [DepartmentCode](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/composables/useQueueState.ts#27-28) from [useQueueState.ts](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/composables/useQueueState.ts)
+- These types are shared between the kiosk page and admin queuing module
+
+#### [NEW] [admin.ts](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/types/admin.ts)
+- Move [DocFile](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/documents.vue#2-13) from [documents.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/documents.vue), [Asset](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/assets.vue#2-11) from [assets.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/assets.vue), [Staff](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue#2-11)/[ShiftEntry](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue#12-16)/[BiometricLog](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue#17-26) from [hr.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue), [DisposalLog](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/waste.vue#2-11) from [waste.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/waste.vue)
+
+#### [MODIFY] [useQueueState.ts](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/composables/useQueueState.ts)
+- Remove interface declarations, import from `~/types/queue`
+
+#### [MODIFY] [queuing.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/queuing.vue)
+- No change needed (types are used via composable)
+
+#### [MODIFY] [documents.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/documents.vue)
+- Remove [DocFile](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/documents.vue#2-13) interface, import from `~/types/admin`
+
+#### [MODIFY] [assets.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/assets.vue)
+- Remove [Asset](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/assets.vue#2-11) interface, import from `~/types/admin`
+
+#### [MODIFY] [hr.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue)
+- Remove [Staff](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue#2-11), [ShiftEntry](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue#12-16), [BiometricLog](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue#17-26) interfaces, import from `~/types/admin`
+
+#### [MODIFY] [waste.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/waste.vue)
+- Remove [DisposalLog](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/waste.vue#2-11) interface, import from `~/types/admin`
+
+---
+
+### 2. Layouts — Convert admin page to a proper Nuxt layout
+
+#### [NEW] [admin.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/layouts/admin.vue)
+- Move the entire sidebar + top bar + `<NuxtPage />` structure from [pages/admin.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin.vue) into a proper Nuxt layout file
+- Replace `<NuxtPage />` with `<slot />` (Nuxt layout convention)
+
+#### [MODIFY] [admin.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin.vue)
+- Convert to a simple page that sets `definePageMeta({ layout: 'admin' })` and renders `<NuxtPage />`
+- This keeps the nested route structure working
+
+#### [MODIFY] Admin sub-pages ([queuing.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/queuing.vue), [documents.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/documents.vue), [assets.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/assets.vue), [hr.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue), [waste.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/waste.vue), [index.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/index.vue))
+- No layout changes needed—they are nested under `pages/admin/` and inherit from the parent [pages/admin.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin.vue)
+
+---
+
+### 3. Layouts — Add a default layout
+
+#### [NEW] [default.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/layouts/default.vue)
+- Create a minimal default layout with `<slot />`
+- Remove `definePageMeta({ layout: false })` from [index.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/index.vue) and [kiosk.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/kiosk.vue) since the default layout will be transparent
+
+---
+
+### 4. Components — Extract kiosk ticket modal
+
+#### [NEW] [KioskTicketModal.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/components/kiosk/KioskTicketModal.vue)
+- Extract the ticket printing modal (~60 lines of template + logic) from [kiosk.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/kiosk.vue) into a reusable component
+- Props: `show`, `isPrinting`, `ticket` (the printed ticket data)
+- Emits: [close](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/kiosk.vue#79-84)
+
+#### [MODIFY] [kiosk.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/kiosk.vue)
+- Replace inline modal with `<KioskTicketModal />`
+
+---
+
+## Final Structure
+
+```
+app/
+├── app.vue
+├── app.config.ts
+├── assets/css/main.css
+├── components/
+│   ├── AppLogo.vue
+│   └── kiosk/
+│       └── KioskTicketModal.vue
+├── composables/
+│   ├── useLanguage.ts
+│   └── useQueueState.ts
+├── layouts/
+│   ├── default.vue
+│   └── admin.vue
+├── pages/
+│   ├── index.vue
+│   ├── kiosk.vue
+│   ├── admin.vue          (sets layout: 'admin', renders NuxtPage)
+│   └── admin/
+│       ├── index.vue
+│       ├── queuing.vue
+│       ├── documents.vue
+│       ├── assets.vue
+│       ├── hr.vue
+│       └── waste.vue
+└── types/
+    ├── queue.ts
+    └── admin.ts
+```
+
+## User Review Required
+
+> [!IMPORTANT]
+> The [admin.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin.vue) page currently acts as both a page and a layout (sidebar + content area with nested `<NuxtPage />`). The plan converts it to a proper Nuxt layout file (`layouts/admin.vue`), while keeping [pages/admin.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin.vue) as a thin wrapper. This preserves all routing behavior.
+
+> [!NOTE]
+> Nuxt auto-imports from `types/`, `composables/`, and `components/` directories, so most import statements will be handled automatically.
+
+## Verification Plan
+
+### Automated Tests
+- No existing test framework in the project
+
+### Manual Verification
+1. Run `pnpm dev` — confirm no build/compile errors
+2. Open browser at `http://localhost:3000` — verify the landing page renders with the two entry cards
+3. Click "Patient Kiosk" — verify kiosk page loads with departments and queue panel
+4. Select a department — verify ticket modal appears with printing animation
+5. Click "Admin Dashboard" — verify redirect to `/admin/queuing` with sidebar layout
+6. Click each sidebar module (Documents, Assets, HR, Waste) — verify each loads correctly
+7. Verify queue state syncs between kiosk and admin (generate ticket on kiosk, see it in admin queuing)

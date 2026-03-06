@@ -1,0 +1,40 @@
+# Data Extraction to Server Directory
+
+All hardcoded mock data has been extracted from page components into proper Nuxt `server/api/` routes.
+
+## New Server API Routes
+
+| API Route | Serves | Source |
+|-----------|--------|--------|
+| `GET /api/documents` | Document file tree | `documents.vue` |
+| `GET /api/assets?type=it\|medical` | IT & medical assets | `assets.vue` |
+| `GET /api/hr/staff` | Staff roster | `hr.vue` |
+| `GET /api/hr/shifts` | Shift schedule | `hr.vue` |
+| `GET /api/hr/biometric` | Biometric logs | `hr.vue` |
+| `GET /api/waste/categories` | Waste categories + weekly data | `waste.vue` |
+| `GET /api/waste/logs` | Disposal logs | `waste.vue` |
+
+## Updated Pages
+
+Each admin page now uses `useFetch()` to retrieve data from these API endpoints:
+
+- [documents.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/documents.vue) — `useFetch('/api/documents')`
+- [assets.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/assets.vue) — `useFetch('/api/assets', { query: { type } })`
+- [hr.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/hr.vue) — 3 `useFetch` calls for staff, shifts, biometric
+- [waste.vue](file:///c:/Users/barra/OneDrive/Desktop/code/app-hms/app/pages/admin/waste.vue) — `useFetch` for categories and logs
+
+## Directory Structure
+
+```
+server/
+└── api/
+    ├── assets.get.ts
+    ├── documents.get.ts
+    ├── hr/
+    │   ├── biometric.get.ts
+    │   ├── shifts.get.ts
+    │   └── staff.get.ts
+    └── waste/
+        ├── categories.get.ts
+        └── logs.get.ts
+```
