@@ -34,7 +34,7 @@ const avatarColors = ['from-blue-400 to-blue-600', 'from-violet-400 to-violet-60
     <div class="space-y-6">
         <!-- Section Toggle -->
         <div
-            class="flex items-center gap-2 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-xl w-full max-w-full overflow-x-auto custom-scrollbar">
+            class="flex items-center gap-2 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-xl w-fit max-w-full overflow-x-auto custom-scrollbar">
             <button v-for="section in [
                 { key: 'roster', label: 'Staff Roster', icon: 'i-lucide-users' },
                 { key: 'shifts', label: 'Shift Calendar', icon: 'i-lucide-calendar-days' },
@@ -82,8 +82,8 @@ const avatarColors = ['from-blue-400 to-blue-600', 'from-violet-400 to-violet-60
 
         <!-- Shift Calendar -->
         <div v-if="activeSection === 'shifts'"
-            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-2xl p-5">
-            <div class="flex items-center gap-4 mb-5">
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-200 dark:border-white/5 rounded-2xl">
+            <div class="flex items-center gap-4 px-5 py-4">
                 <h3 class="text-sm font-semibold text-slate-900 dark:text-white">Weekly Schedule</h3>
                 <div class="flex items-center gap-3 ml-auto">
                     <span v-for="(config, key) in shiftConfig" :key="key" class="flex items-center gap-1.5 text-xs">
@@ -112,7 +112,7 @@ const avatarColors = ['from-blue-400 to-blue-600', 'from-violet-400 to-violet-60
                         <tr v-for="entry in shiftSchedule" :key="entry.staffName"
                             class="border-b border-slate-100 dark:border-white/3">
                             <td class="px-4 py-3 text-sm font-medium text-slate-900 dark:text-white">{{ entry.staffName
-                            }}</td>
+                                }}</td>
                             <td v-for="(shift, dayIdx) in entry.shifts" :key="dayIdx" class="px-2 py-2 text-center">
                                 <span v-if="shift && shiftConfig[shift]"
                                     :class="[shiftConfig[shift].bg, shiftConfig[shift].text, 'shift-block inline-flex items-center justify-center w-full']">
