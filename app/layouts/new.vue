@@ -5,14 +5,16 @@
                 :ui="{ root: 'w-auto', header: 'border-b border-white/5', footer: 'lg:border-t border-white/5' }">
                 <template #header="{ collapsed }">
                     <div v-if="!collapsed" class="px-2.5 flex items-center gap-2">
-                        <UAvatar icon="i-lucide-hospital" size="lg" class="bg-primary rounded-lg" :ui="{ icon: 'text-white' }" />
+                        <UAvatar icon="i-lucide-hospital" size="lg" class="bg-primary rounded-lg"
+                            :ui="{ icon: 'text-white' }" />
                         <div class="flex flex-col">
                             <h1 class="font-bold text-white leading-tight mt-0.5">Sulu Sanitarium</h1>
                             <p class="text-xs text-slate-500 leading-tight">Hospital Management</p>
                         </div>
                     </div>
                     <div v-else class="mx-auto">
-                        <UAvatar icon="i-lucide-hospital" size="lg" class="bg-primary rounded-lg" :ui="{ icon: 'text-white' }" />
+                        <UAvatar icon="i-lucide-hospital" size="lg" class="bg-primary rounded-lg"
+                            :ui="{ icon: 'text-white' }" />
                     </div>
                 </template>
                 <template #default="{ collapsed }">
@@ -43,27 +45,27 @@ const items: NavigationMenuItem[][] = [
             {
                 label: 'Queuing Control',
                 icon: 'i-lucide-list-ordered',
-                to: '/queuing'
+                to: '/new/queuing'
             },
             {
                 label: 'Documents',
                 icon: 'i-lucide-folder-open',
-                to: '/documents'
+                to: '/new/documents'
             },
             {
                 label: 'Asset Management',
                 icon: 'i-lucide-box',
-                to: '/assets'
+                to: '/new/assets'
             },
             {
                 label: 'Human Resources',
                 icon: 'i-lucide-users',
-                to: '/hr'
+                to: '/new/hr'
             },
             {
                 label: 'Waste Management',
                 icon: 'i-lucide-recycle',
-                to: '/waste'
+                to: '/new/waste'
             }
         ]
     ],
