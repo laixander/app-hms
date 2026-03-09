@@ -1,24 +1,28 @@
 <template>
     <UDashboardGroup>
         <div class="dark flex h-full">
-            <UDashboardSidebar resizable collapsible class="bg-[#0f1a2e]"
+            <UDashboardSidebar resizable collapsible class="bg-neutral-900"
                 :ui="{ root: 'w-auto', header: 'border-b border-white/5', footer: 'lg:border-t border-white/5' }">
                 <template #header="{ collapsed }">
-                    <div v-if="!collapsed" class="px-2.5">
-                        <AppLogo class="h-5 w-auto shrink-0 text-neutral-50" />
+                    <div v-if="!collapsed" class="px-2.5 flex items-center gap-2">
+                        <UAvatar icon="i-lucide-hospital" size="lg" class="bg-primary rounded-lg" :ui="{ icon: 'text-white' }" />
+                        <div class="flex flex-col">
+                            <h1 class="font-bold text-white leading-tight mt-0.5">Sulu Sanitarium</h1>
+                            <p class="text-xs text-slate-500 leading-tight">Hospital Management</p>
+                        </div>
                     </div>
                     <div v-else class="mx-auto">
-                        <UIcon name="i-simple-icons-nuxtdotjs" class="flex size-6 text-primary" />
+                        <UAvatar icon="i-lucide-hospital" size="lg" class="bg-primary rounded-lg" :ui="{ icon: 'text-white' }" />
                     </div>
                 </template>
                 <template #default="{ collapsed }">
                     <UNavigationMenu
-                        :ui="{ root: 'gap-2.5', label: 'text-default uppercase tracking-widest py-2.5', link: 'p-2.5', list: 'space-y-0.5' }"
+                        :ui="{ root: 'gap-2.5', label: 'text-default uppercase tracking-widest py-2.5', link: 'p-2.5 gap-2.5', list: 'space-y-0.5' }"
                         :collapsed="collapsed" :items="items[0]" orientation="vertical" tooltip popover />
                     <!-- <UNavigationMenu :ui="{ root: 'gap-2.5', link: 'p-2.5', list: 'space-y-0.5' }" :collapsed="collapsed" :items="items[1]" orientation="vertical" tooltip class="mt-auto" /> -->
                 </template>
                 <template #footer="{ collapsed }">
-                    <UNavigationMenu :ui="{ root: 'w-full gap-2.5', link: 'p-2.5', list: 'space-y-0.5' }"
+                    <UNavigationMenu :ui="{ root: 'w-full gap-2.5', link: 'p-2.5 gap-2.5', list: 'space-y-0.5' }"
                         :collapsed="collapsed" :items="items[1]" orientation="vertical" tooltip class="mt-auto" />
                 </template>
             </UDashboardSidebar>
@@ -33,83 +37,41 @@ const items: NavigationMenuItem[][] = [
     [
         [
             {
-                label: 'Overview',
-                type: 'label'
-            },
-            {
-                label: 'Executive Dashboard',
-                icon: 'i-lucide-pie-chart',
-                to: '/'
-            }
-        ],
-        [
-            {
                 label: 'Modules',
                 type: 'label'
             },
             {
-                label: 'Business Permits',
-                icon: 'i-lucide-building-2',
-                to: '/business-permits'
+                label: 'Queuing Control',
+                icon: 'i-lucide-list-ordered',
+                to: '/queuing'
             },
             {
-                label: 'Real Property',
-                icon: 'i-lucide-map-pin',
-                to: '/real-property'
-            }
-        ],
-        [
-            {
-                label: 'System Management',
-                type: 'label'
+                label: 'Documents',
+                icon: 'i-lucide-folder-open',
+                to: '/documents'
             },
             {
-                label: 'Departments',
-                icon: 'i-lucide-landmark',
-                to: '/departments'
+                label: 'Asset Management',
+                icon: 'i-lucide-box',
+                to: '/assets'
             },
             {
-                label: 'Permit Types',
-                icon: 'i-lucide-list-checks',
-                to: '/permit-types'
+                label: 'Human Resources',
+                icon: 'i-lucide-users',
+                to: '/hr'
             },
             {
-                label: 'Line of Business',
-                icon: 'i-lucide-layers',
-                to: '/line-of-business'
-            },
-            {
-                label: 'Requirements Library',
-                icon: 'i-lucide-book-open',
-                to: '/requirements-library'
-            },
-            {
-                label: 'References',
-                icon: 'i-lucide-bookmark',
-                to: '/references'
-            }
-        ],
-        [
-            {
-                label: 'User & Access',
-                type: 'label'
-            },
-            {
-                label: 'User Management',
-                icon: 'i-lucide-users'
-            },
-            {
-                label: 'Roles & Permissions',
-                icon: 'i-lucide-shield-check'
+                label: 'Waste Management',
+                icon: 'i-lucide-recycle',
+                to: '/waste'
             }
         ]
     ],
     [
         {
-            label: 'Documentation',
-            icon: 'i-lucide-book-marked',
-            to: '/documentation/platform-overview',
-            target: '_blank'
+            label: 'Kiosk View',
+            icon: 'i-lucide-monitor',
+            to: '/kiosk'
         }
     ]
 ]

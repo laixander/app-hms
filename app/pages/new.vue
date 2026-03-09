@@ -1,12 +1,9 @@
 <template>
-    <UDashboardPanel>
+    <UDashboardPanel :ui="{ body: 'bg-neutral-50 dark:bg-neutral-900' }">
         <template #header>
-            <UDashboardNavbar title="Executive Dashboard" :ui="{ title: 'text-default' }">
+            <UDashboardNavbar title="Queuing Control" :ui="{ title: 'text-default' }">
                 <template #leading>
                     <UDashboardSidebarCollapse />
-                </template>
-                <template #trailing>
-                    <UBadge label="4" variant="subtle" />
                 </template>
                 <template #right>
                     <UColorModeButton />
@@ -15,8 +12,44 @@
             </UDashboardNavbar>
         </template>
         <template #body>
-            <div>
-                <h1>new</h1>
+            <div class="flex flex-col gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <UCard v-for="queuing in queuings" :key="queuing.title" :ui="{ root: 'divide-none', header: 'flex items-center justify-between pb-0' }">
+                        <template #header>
+                            <div class="uppercase text-xs text-muted font-bold tracking-widest">{{ queuing.title }}</div>
+                            <UBadge :icon="queuing.icon" :color="queuing.color" class="size-10 rounded-lg flex justify-center" variant="soft" />
+                        </template>
+                        <div class="text-4xl font-bold">{{ queuing.value || 0 }}</div>
+                        <div class="text-xs text-dimmed">{{ queuing.description }}</div>
+                    </UCard>
+                </div>
+                <div>
+                    <UButton label="Call Next Number" icon="i-lucide-phone-forwarded" size="lg" />
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <UCard :ui="{ header: 'flex items-center gap-4' }" class="col-span-2">
+                        <template #header>
+                            <UIcon name="i-lucide-list" class="size-4 text-primary" />
+                            <div class="uppercase text-xs text-muted font-bold tracking-widest">Live Queue</div>
+                        </template>
+                        <div class="flex flex-col items-center text-dimmed">
+                            <UIcon name="i-lucide-inbox" class="size-12" />
+                            <div class="font-medium leading-8">No patients waiting</div>
+                            <div class="text-xs tracking-wide">Tickets will appear here when generated from the kiosk</div>
+                        </div>
+                    </UCard>
+                    <UCard :ui="{ header: 'flex items-center gap-4' }">
+                        <template #header>
+                            <UIcon name="i-lucide-bar-chart-3" class="size-4 text-primary" />
+                            <div class="uppercase text-xs text-muted font-bold tracking-widest">
+                                Average Wait time
+                            </div>
+                        </template>
+                        <div class="h-64">
+                            <WaitTimeBarChart />
+                        </div>
+                    </UCard>
+                </div>
             </div>
         </template>
     </UDashboardPanel>
@@ -25,4 +58,35 @@
 definePageMeta({
     layout: 'new'
 })
+
+const queuings = [
+    {
+        title: 'Now Serving',
+        icon: 'i-lucide-user',
+        color: 'primary',
+        value: 0,
+        description: 'No patient'
+    },
+    {
+        title: 'Waiting',
+        icon: 'i-lucide-clock',
+        color: 'error',
+        value: 0,
+        description: 'patients in queue'
+    },
+    {
+        title: 'Served Today',
+        icon: 'i-lucide-check-circle',
+        color: 'success',
+        value: 0,
+        description: 'completed'
+    },
+    {
+        title: 'Total Tickets',
+        icon: 'i-lucide-ticket',
+        color: 'warning',
+        value: 0,
+        description: 'today'
+    }
+] as const
 </script>

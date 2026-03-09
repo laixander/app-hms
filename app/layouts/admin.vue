@@ -54,7 +54,7 @@ onMounted(() => {
         <!-- Sidebar -->
         <aside :class="['admin-sidebar', { 'is-open': isSidebarOpen, 'is-collapsed': isCollapsed }]">
             <!-- Logo -->
-            <div class="p-5 border-b border-white/5">
+            <div class="px-5 py-3.5 border-b border-white/5">
                 <NuxtLink to="/" class="admin-sidebar-logo flex items-center gap-3 group">
                     <div
                         class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
@@ -80,7 +80,7 @@ onMounted(() => {
 
             <!-- Sidebar Footer -->
             <div class="p-4 border-t border-white/5">
-                <div class="flex items-center gap-3 px-3 py-2">
+                <div class="admin-sidebar-user flex items-center gap-3">
                     <div
                         class="w-8 h-8 rounded-full shrink-0 bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-xs font-bold text-white">
                         AD

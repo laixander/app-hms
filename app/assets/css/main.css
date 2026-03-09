@@ -237,6 +237,11 @@
     gap: 0;
   }
 
+  .admin-sidebar.is-collapsed .admin-sidebar-user {
+    justify-content: center;
+    gap: 0;
+  }
+
   .admin-sidebar.is-collapsed .admin-sidebar-logo {
     justify-content: center;
     gap: 0;
