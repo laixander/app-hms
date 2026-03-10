@@ -12,12 +12,14 @@
 </template>
 
 <script setup lang="ts">
+import type { AppColor } from '~/types/ui'
+
 interface Props {
     title?: string
     value?: string | number
     description?: string
     icon?: string
-    color?: "primary" | "secondary" | "success" | "info" | "warning" | "error" | "neutral" | "purple" | "pink" | "orange" | "amber" | "yellow" | "lime" | "green" | "emerald" | "teal" | "cyan" | "sky" | "blue" | "indigo" | "violet" | "fuchsia" | "rose"
+    color?: AppColor
 }
 
 defineProps<Props>()
