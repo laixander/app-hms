@@ -1,60 +1,39 @@
 <template>
     <div class="flex flex-col gap-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <UCard v-for="queuing in queuings" :key="queuing.title"
-                :ui="{ root: 'divide-none', header: 'flex items-center justify-between pb-0' }">
-                <template #header>
-                    <div class="uppercase text-xs text-muted font-bold tracking-widest">{{ queuing.title }}
-                    </div>
-                    <UBadge :icon="queuing.icon" :color="queuing.color" class="size-10 rounded-lg flex justify-center"
-                        variant="soft" />
-                </template>
-                <div class="text-4xl font-bold">{{ queuing.value || 0 }}</div>
-                <div class="text-xs text-dimmed">{{ queuing.description }}</div>
-            </UCard>
+            <StatCard v-for="stat in queuings" :key="stat.title" v-bind="stat" />
         </div>
-        <div>
-            <UButton label="Call Next Number" icon="i-lucide-phone-forwarded" size="lg" @click="showToast" />
-        </div>
+        <ControlPanel />
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <UCard
-                :ui="{ root: 'flex flex-col', header: 'flex items-center gap-4', body: 'flex-1 flex flex-col items-center justify-center' }"
-                class="col-span-2">
-                <template #header>
-                    <UIcon name="i-lucide-list" class="size-4 text-primary" />
-                    <div class="uppercase text-xs text-muted font-bold tracking-widest">Live Queue</div>
+            <ServiceControls>
+                <template #onHold>
+                    <QueueCard v-for="queue in queues" :key="queue.ticketNumber" v-bind="queue" />
                 </template>
-                <UIcon name="i-lucide-inbox" class="size-12 text-dimmed" />
-                <div class="text-dimmed font-medium leading-8">No patients waiting</div>
-                <div class="text-xs text-dimmed tracking-wide">Tickets will appear here when generated from the
-                    kiosk
-                </div>
-            </UCard>
-            <UCard :ui="{ header: 'flex items-center gap-4' }">
-                <template #header>
-                    <UIcon name="i-lucide-bar-chart-3" class="size-4 text-primary" />
-                    <div class="uppercase text-xs text-muted font-bold tracking-widest">
-                        Average Wait time
-                    </div>
+                <template #serviceWindows>
+                    <ServiceWindowCard v-for="window in 4" :key="window" :window="window" />
                 </template>
-                <div class="h-64">
-                    <WaitTimeBarChart />
-                </div>
-            </UCard>
+            </ServiceControls>
+            <WaitingQueue>
+                <Empty />
+            </WaitingQueue>
+            <ChartCard title="Average Wait time">
+                <WaitTimeBarChart />
+            </ChartCard>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-const toast = useToast()
+import ControlPanel from '~/components/queuing/ControlPanel.vue'
+import ServiceControls from '~/components/queuing/ServiceControls.vue';
+import StatCard from '~/components/queuing/StatCard.vue';
+import ServiceWindowCard from '~/components/queuing/ServiceWindowCard.vue';
+import WaitingQueue from '~/components/queuing/WaitingQueue.vue';
+import QueueCard from '~/components/queuing/QueueCard.vue';
 
-function showToast() {
-    toast.add({
-        title: 'Queue Empty',
-        description: 'No more patients waiting in the queue.',
-        icon: 'i-lucide-info'
-    })
-}
+definePageMeta({
+    title: 'Queuing Control'
+})
 
 const queuings = [
     {
@@ -84,6 +63,30 @@ const queuings = [
         color: 'warning',
         value: 0,
         description: 'today'
+    }
+] as const
+
+const queues = [
+    {
+        ticketNumber: 'PD-002',
+        department: 'Pediatrics',
+        time: '11:13 AM',
+        icon: 'i-lucide-baby',
+        color: 'purple'
+    },
+    {
+        ticketNumber: 'GM-001',
+        department: 'General Medicine',
+        time: '11:13 AM',
+        icon: 'i-lucide-stethoscope',
+        color: 'primary'
+    },
+    {
+        ticketNumber: 'OB-001',
+        department: 'OB-GYN',
+        time: '11:13 AM',
+        icon: 'i-lucide-heart-pulse',
+        color: 'pink'
     }
 ] as const
 </script>
