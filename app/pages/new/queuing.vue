@@ -7,7 +7,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <ServiceControls>
                 <template #onHold>
-                    <QueueCard v-for="queue in queues" :key="queue.ticketNumber" v-bind="queue" />
+                    <QueueCard v-for="queue in holds" :key="queue.ticketNumber" v-bind="queue" />
                 </template>
                 <template #serviceWindows>
                     <ServiceWindowCard v-for="window in 4" :key="window" :window="window" />
@@ -15,6 +15,7 @@
             </ServiceControls>
             <WaitingQueue>
                 <Empty />
+                <QueueCard v-for="queue in queues" :key="queue.ticketNumber" v-bind="queue" />
             </WaitingQueue>
             <ChartCard title="Average Wait time">
                 <WaitTimeBarChart />
@@ -87,6 +88,30 @@ const queues = [
         time: '11:13 AM',
         icon: 'i-lucide-heart-pulse',
         color: 'pink'
+    }
+] as const
+
+const holds = [
+    {
+        ticketNumber: 'DN-001',
+        department: 'Dental',
+        time: '11:13 AM',
+        icon: 'i-lucide-smile',
+        color: 'sky'
+    },
+    {
+        ticketNumber: 'LB-001',
+        department: 'Laboratory',
+        time: '11:13 AM',
+        icon: 'i-lucide-flask-conical',
+        color: 'orange'
+    },
+    {
+        ticketNumber: 'PH-001',
+        department: 'Pharmacy',
+        time: '11:13 AM',
+        icon: 'i-lucide-pill',
+        color: 'emerald'
     }
 ] as const
 </script>

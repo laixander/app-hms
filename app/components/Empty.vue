@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col items-center gap-2">
+    <div class="flex flex-col items-center gap-2 py-8">
         <UIcon :name="icon" class="size-12 text-dimmed" />
         <div class="text-center space-y-1">
             <div class="text-xs text-dimmed uppercase tracking-wider font-bold">
