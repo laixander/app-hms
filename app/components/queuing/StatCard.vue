@@ -1,13 +1,15 @@
 <template>
-    <UCard :ui="{ root: 'divide-none', header: 'flex items-center justify-between pb-0' }">
-        <template #header>
+    <UCard :ui="{ body: 'flex flex-col gap-4' }">
+        <div class="flex items-center justify-between">
             <div class="uppercase text-xs text-muted font-bold tracking-widest">
                 {{ title }}
             </div>
             <UBadge :icon="icon" :color="color" class="size-10 rounded-lg flex justify-center" variant="soft" />
-        </template>
-        <div class="text-4xl font-bold">{{ value || 0 }}</div>
-        <div class="text-xs text-dimmed">{{ description }}</div>
+        </div>
+        <div>
+            <div class="text-4xl font-extrabold font-mono">{{ value || 0 }}</div>
+            <div class="text-xs text-dimmed">{{ description }}</div>
+        </div>
     </UCard>
 </template>
 

@@ -4,7 +4,7 @@ export interface QueueEntry {
   department: string
   departmentCode: string
   timestamp: number
-  status: 'waiting' | 'serving' | 'completed' | 'skipped'
+  status: 'waiting' | 'serving' | 'completed' | 'skipped' | 'on_hold'
   calledAt?: number
 }
 

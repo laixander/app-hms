@@ -7,15 +7,34 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
             <ServiceControls>
                 <template #onHold>
-                    <QueueCard v-for="queue in holds" :key="queue.ticketNumber" v-bind="queue" />
+                    <QueueCard 
+                        v-for="queue in getHeldEntries()" 
+                        :key="queue.id" 
+                        :ticket-number="queue.number"
+                        :department="queue.department"
+                        :time="new Date(queue.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })"
+                        :icon="getDeptIcon(queue.departmentCode)"
+                        :color="getDeptColor(queue.departmentCode)"
+                        status="on_hold"
+                    />
                 </template>
                 <template #serviceWindows>
                     <ServiceWindowCard v-for="window in 4" :key="window" :window="window" />
                 </template>
             </ServiceControls>
             <WaitingQueue>
-                <Empty />
-                <QueueCard v-for="queue in queues" :key="queue.ticketNumber" v-bind="queue" />
+                <Empty v-if="getWaitingEntries().length === 0" />
+                <QueueCard 
+                    v-for="(queue, index) in getWaitingEntries()" 
+                    :key="queue.id" 
+                    :ticket-number="queue.number"
+                    :department="queue.department"
+                    :time="new Date(queue.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })"
+                    :icon="getDeptIcon(queue.departmentCode)"
+                    :color="getDeptColor(queue.departmentCode)"
+                    :position="index + 1"
+                    :est-wait-time="(index * 5).toString()"
+                />
             </WaitingQueue>
             <ChartCard title="Average Wait time">
                 <WaitTimeBarChart />
@@ -36,60 +55,50 @@ definePageMeta({
     title: 'Queuing Control'
 })
 
-const queuings = [
+const { state, getWaitingCount, getServedEntries, getWaitingEntries, getHeldEntries } = useQueueState()
+
+const queuings = computed(() => [
     {
         title: 'Now Serving',
         icon: 'i-lucide-user',
-        color: 'primary',
-        value: 0,
-        description: 'No patient'
+        color: 'primary' as const,
+        value: state.value.currentServing ? state.value.currentServing.number : '--',
+        description: state.value.currentServing ? state.value.currentServing.department : 'No patient'
     },
     {
         title: 'Waiting',
         icon: 'i-lucide-clock',
-        color: 'error',
-        value: 0,
+        color: 'error' as const,
+        value: getWaitingCount(),
         description: 'patients in queue'
     },
     {
         title: 'Served Today',
         icon: 'i-lucide-check-circle',
-        color: 'success',
-        value: 0,
+        color: 'success' as const,
+        value: getServedEntries().length,
         description: 'completed'
     },
     {
         title: 'Total Tickets',
         icon: 'i-lucide-ticket',
-        color: 'warning',
-        value: 0,
+        color: 'warning' as const,
+        value: state.value.entries.length,
         description: 'today'
     }
-] as const
+])
 
-const queues = [
-    {
-        ticketNumber: 'PD-002',
-        department: 'Pediatrics',
-        time: '11:13 AM',
-        icon: 'i-lucide-baby',
-        color: 'purple'
-    },
-    {
-        ticketNumber: 'GM-001',
-        department: 'General Medicine',
-        time: '11:13 AM',
-        icon: 'i-lucide-stethoscope',
-        color: 'primary'
-    },
-    {
-        ticketNumber: 'OB-001',
-        department: 'OB-GYN',
-        time: '11:13 AM',
-        icon: 'i-lucide-heart-pulse',
-        color: 'pink'
-    }
-] as const
+const deptMap: Record<string, { icon: string, color: any }> = {
+    GM: { icon: 'i-lucide-stethoscope', color: 'primary' },
+    PD: { icon: 'i-lucide-baby', color: 'purple' },
+    OB: { icon: 'i-lucide-heart-pulse', color: 'pink' },
+    DN: { icon: 'i-lucide-smile', color: 'sky' },
+    LB: { icon: 'i-lucide-flask-conical', color: 'orange' },
+    PH: { icon: 'i-lucide-pill', color: 'emerald' }
+}
+
+const getDeptIcon = (code: string) => deptMap[code]?.icon || 'i-lucide-help-circle'
+const getDeptColor = (code: string) => deptMap[code]?.color || 'gray'
 
 const holds = [
     {

@@ -1,7 +1,7 @@
 <template>
-    <UDashboardPanel :ui="{ body: 'bg-neutral-50 dark:bg-neutral-950/50' }">
+    <UDashboardPanel :ui="{ root: 'bg-neutral-50 dark:bg-neutral-950/50' }">
         <template #header>
-            <UDashboardNavbar :title="(route.meta.title as string) || 'Page Title'" :ui="{ title: 'text-default' }">
+            <UDashboardNavbar :title="(route.meta.title as string) || 'Page Title'" :ui="{ root: 'relative z-10 bg-default', title: 'text-default' }">
                 <template #leading>
                     <UDashboardSidebarCollapse />
                 </template>
@@ -10,6 +10,7 @@
                     <UserMenu />
                 </template>
             </UDashboardNavbar>
+            <QueuingPaAnnouncement v-if="hasQueue" />
         </template>
         <template #body>
             <NuxtPage />
@@ -18,6 +19,9 @@
 </template>
 <script setup lang="ts">
 const route = useRoute()
+const { state } = useQueueState()
+const hasQueue = computed(() => state.value.entries.length > 0)
+
 definePageMeta({
     layout: 'new'
 })

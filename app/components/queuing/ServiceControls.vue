@@ -2,6 +2,7 @@
 import { useSlots, computed, Comment, Text } from 'vue'
 
 const slots = useSlots()
+const { getHeldEntries } = useQueueState()
 
 const hasContent = (slotName: string) => {
     const slot = slots[slotName]
@@ -27,16 +28,14 @@ const hasServiceWindows = computed(() => hasContent('serviceWindows'))
                 Service Controls
             </div>
         </template>
-        <!-- this is to show the on hold section if it has content -->
         <div v-if="hasOnHold" class="space-y-4 p-6">
             <div class="text-xs text-warning uppercase">
-                On Hold <UBadge label="1" variant="outline" color="warning" size="sm"  />
+                On Hold <UBadge :label="getHeldEntries().length.toString()" variant="soft" color="warning" size="sm"  />
             </div>
             <div class="flex flex-col gap-2">
                 <slot name="onHold" />
             </div>
         </div>
-        <!-- this is to show the service windows section if it has content -->
         <div v-if="hasServiceWindows" class="space-y-4 p-6">
             <div class="text-xs text-muted uppercase">
                 Service Windows

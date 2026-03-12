@@ -118,6 +118,17 @@ export function useQueueState() {
         return null
     }
 
+    function holdCurrent(): void {
+        if (state.value.currentServing) {
+            const current = state.value.entries.find(
+                e => e.id === state.value.currentServing!.id
+            )
+            if (current) current.status = 'on_hold'
+            state.value.currentServing = null
+            broadcast()
+        }
+    }
+
     function skipCurrent(): void {
         if (state.value.currentServing) {
             const current = state.value.entries.find(
@@ -139,6 +150,10 @@ export function useQueueState() {
 
     function getServedEntries(): QueueEntry[] {
         return state.value.entries.filter(e => e.status === 'completed')
+    }
+
+    function getHeldEntries(): QueueEntry[] {
+        return state.value.entries.filter(e => e.status === 'on_hold')
     }
 
     function getWaitTimeByDept(): Record<string, number> {
@@ -167,9 +182,11 @@ export function useQueueState() {
         departments: DEPARTMENTS,
         generateTicket,
         callNext,
+        holdCurrent,
         skipCurrent,
         getWaitingCount,
         getWaitingEntries,
+        getHeldEntries,
         getServedEntries,
         getWaitTimeByDept,
         resetQueue

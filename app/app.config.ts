@@ -5,7 +5,7 @@ export default defineAppConfig({
       neutral: 'slate',
       success: 'emerald',
       info: 'sky',
-      warning: 'amber',
+      warning: 'yellow',
       error: 'red',
       red: 'red',
       orange: 'orange',
