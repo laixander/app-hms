@@ -140,6 +140,38 @@ export function useQueueState() {
         }
     }
 
+    function resumeTicket(id: number): void {
+        const entry = state.value.entries.find(e => e.id === id)
+        if (entry && entry.status === 'on_hold') {
+            // If something is currently serving, we move it back to 'waiting' or 'completed'?
+            // Usually, resuming a held ticket means it becomes the 'currentServing' again.
+            // If the counter is busy, we might need a different logic, but for simplicity:
+            
+            // Mark current serving as waiting if it exists
+            if (state.value.currentServing) {
+                const current = state.value.entries.find(e => e.id === state.value.currentServing!.id)
+                if (current) current.status = 'waiting'
+            }
+
+            entry.status = 'serving'
+            entry.calledAt = Date.now()
+            state.value.currentServing = { ...entry }
+            broadcast()
+        }
+    }
+
+    function skipTicket(id: number): void {
+        const entry = state.value.entries.find(e => e.id === id)
+        if (entry) {
+            entry.status = 'skipped'
+            // If it was the current serving, clear it
+            if (state.value.currentServing?.id === id) {
+                state.value.currentServing = null
+            }
+            broadcast()
+        }
+    }
+
     function getWaitingCount(): number {
         return state.value.entries.filter(e => e.status === 'waiting').length
     }
@@ -189,6 +221,8 @@ export function useQueueState() {
         getHeldEntries,
         getServedEntries,
         getWaitTimeByDept,
+        resumeTicket,
+        skipTicket,
         resetQueue
     }
 }

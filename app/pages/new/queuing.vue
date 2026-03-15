@@ -10,12 +10,14 @@
                     <QueueCard 
                         v-for="queue in getHeldEntries()" 
                         :key="queue.id" 
+                        :id="queue.id"
                         :ticket-number="queue.number"
                         :department="queue.department"
                         :time="new Date(queue.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })"
                         :icon="getDeptIcon(queue.departmentCode)"
                         :color="getDeptColor(queue.departmentCode)"
                         status="on_hold"
+                        :est-wait-time="((Date.now() - queue.timestamp) / 60000).toFixed(0)"
                     />
                 </template>
                 <template #serviceWindows>
@@ -27,11 +29,13 @@
                 <QueueCard 
                     v-for="(queue, index) in getWaitingEntries()" 
                     :key="queue.id" 
+                    :id="queue.id"
                     :ticket-number="queue.number"
                     :department="queue.department"
                     :time="new Date(queue.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })"
                     :icon="getDeptIcon(queue.departmentCode)"
                     :color="getDeptColor(queue.departmentCode)"
+                    status="waiting"
                     :position="index + 1"
                     :est-wait-time="(index * 5).toString()"
                 />

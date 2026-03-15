@@ -8,29 +8,31 @@
                 </div>
             </div>
         </template>
-        <div class="flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <UButton label="Call Next Number" icon="i-lucide-phone-forwarded" @click="showToast" :ui="uiButtonConfig" />
-                    <UButton label="Hold" icon="i-lucide-pause" variant="outline" :ui="uiButtonConfig" />
-                    <UButton label="Skip" icon="i-lucide-skip-forward" variant="outline" :ui="uiButtonConfig" />
-                    <UButton label="Re-announce Current" icon="i-lucide-refresh-cw" variant="outline" :ui="uiButtonConfig" />
-                </div>
-            </div>
-            <UBadge label="System Online" variant="subtle" color="success" class="w-fit rounded-full" :ui="uiBadgeConfig">
-                <template #leading>
+<div class="flex justify-between items-center">
+    <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+            <UButton label="Call Next Number" icon="i-lucide-phone-forwarded" @click="showToast" :ui="uiButtonConfig" />
+            <UButton label="Hold" icon="i-lucide-pause" variant="outline" :ui="uiButtonConfig" />
+            <UButton label="Skip" icon="i-lucide-skip-forward" variant="outline" :ui="uiButtonConfig" />
+            <UButton label="Re-announce Current" icon="i-lucide-refresh-cw" variant="outline" :ui="uiButtonConfig" />
+        </div>
+    </div>
+    <UBadge label="System Online" variant="subtle" color="success" class="w-fit rounded-full" :ui="uiBadgeConfig">
+        <template #leading>
                     <UChip standalone inset color="success" size="xs" />
                 </template>
-            </UBadge>
-        </div>
-    </UCard> -->
+    </UBadge>
+</div>
+</UCard> -->
     <div class="flex justify-between items-center py-2">
         <div class="flex items-center gap-4">
             <div class="flex items-center gap-2">
-                <UButton label="Call Next Number" icon="i-lucide-volume-2" @click="handleCallNext" :ui="uiButtonConfig" />
-                <OnHoldAction />
-                <SkipAction />
-                <UButton label="Re-announce Current" icon="i-lucide-refresh-cw" variant="outline" :ui="uiButtonConfig" @click="reAnnounce" />
+                <UButton label="Call Next Number" icon="i-lucide-volume-2" @click="handleCallNext"
+                    :ui="uiButtonConfig" />
+                <OnHoldButton />
+                <SkipButton />
+                <UButton label="Re-announce Current" icon="i-lucide-refresh-cw" variant="outline" :ui="uiButtonConfig"
+                    @click="reAnnounce" />
             </div>
         </div>
         <UBadge label="System Online" variant="subtle" color="success" class="w-fit rounded-full" :ui="uiBadgeConfig">
@@ -40,12 +42,12 @@
         </UBadge>
     </div>
 
-    
+
 </template>
 
 <script setup lang="ts">
-import OnHoldAction from './OnHoldAction.vue'
-import SkipAction from './SkipAction.vue'
+import OnHoldButton from './OnHoldButton.vue'
+import SkipButton from './SkipButton.vue'
 
 const { uiBadgeConfig, uiButtonConfig } = useAppUI()
 const { announce } = usePaAnnouncement()
