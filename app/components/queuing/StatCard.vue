@@ -1,6 +1,6 @@
 <template>
-    <UCard :ui="{ body: 'flex flex-col gap-4' }">
-        <div class="flex items-center justify-between">
+    <UCard :ui="{ body: 'flex flex-col' }">
+        <div class="flex justify-between">
             <div class="uppercase text-xs text-muted font-bold tracking-widest">
                 {{ title }}
             </div>

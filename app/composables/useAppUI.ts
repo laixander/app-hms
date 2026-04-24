@@ -4,7 +4,7 @@ export const useAppUI = () => {
     }
 
     const uiButtonConfig = {
-        base: 'px-5 py-3 text-xs font-semibold uppercase gap-2 rounded-lg',
+        base: 'px-5 py-3 text-xs font-bold uppercase gap-2 rounded-lg',
         leadingIcon: 'size-4',
         trailingIcon: 'size-4'
     }
